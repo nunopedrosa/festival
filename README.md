@@ -92,3 +92,7 @@ A versão 1.0.2 acrescenta bandeiras SVG locais por baixo de cada código de pa�
 A barra do calendário usa seletores com o mesmo tamanho e estilo, mantendo os controlos numa linha quando há espaço e em duas linhas no telemóvel. O cabeçalho passa a Feriados do mundo. O novo pacote substitui vendor/europe-data.js por vendor/world-data.js e acrescenta vendor/country-names.js e vendor/supplement-data.js, carregados antes de engine.js. Substituir o pacote completo e usar Procurar atualizações → Atualizar aplicação; as preferências e cópias anteriores continuam compatíveis.
 
 Para manutenção opcional das tabelas suplementares: instalar scripts/requirements-data.txt num ambiente Python e executar python3 scripts/generate-supplement.py. Não é necessário para servir ou usar a aplicação, nem para reconstruir os ficheiros estáticos a partir dos dados já incluídos.
+
+## Shared deployment command (2026-11-01)
+
+See [the current deployment contract](docs/SHARED_DEPLOYMENT.md) and `scripts/deploy-profile.sh`. This supersedes older script flags, SSH-only wrappers and broad deletion instructions below/above; hosting coordinates and app-specific private/release requirements still apply. No deployment is authorized by source changes.

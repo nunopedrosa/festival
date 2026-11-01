@@ -1,7 +1,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 (async()=>{let handlers={},stores=new Map(),online=true,skip=false,claim=false;
 const cache={async addAll(files){for(const f of files){const file=f==='./'?'index.html':f.slice(2);assert.ok(fs.existsSync(file),'Missing offline asset '+file);stores.set(new URL(f,'https://festival.test/').href,{ok:true,body:fs.readFileSync(file)});}},async match(req){return stores.get(new URL(typeof req==='string'?req:req.url,'https://festival.test/').href);}};
-const caches={async open(){return cache;},async keys(){return ['other-app','festival-shell-0.8','festival-shell-1.0.2','festival-shell-1.1.0'];},async delete(key){assert.equal(key,'festival-shell-0.8');return true;}};
+const caches={async open(){return cache;},async keys(){return ['other-app','festival-shell-0.8','festival-shell-1.0.2','festival-shell-1.1.1'];},async delete(key){assert.equal(key,'festival-shell-0.8');return true;}};
 const self={location:{origin:'https://festival.test'},clients:{async claim(){claim=true;}},skipWaiting(){skip=true;},addEventListener(type,fn){handlers[type]=fn;}};
 const context={self,caches,URL,Response,Promise,fetch:async req=>{if(!online)throw Error('offline');return {ok:true,body:'network'};},importScripts(file){vm.runInContext(fs.readFileSync(file.slice(2),'utf8'),sandbox);}};const sandbox=vm.createContext(context);vm.runInContext(fs.readFileSync('sw.js','utf8'),sandbox);
 let wait;handlers.install({waitUntil(p){wait=p;}});await wait;assert.equal(skip,false,'No automatic activation');handlers.activate({waitUntil(p){wait=p;}});await wait;assert.equal(claim,true);

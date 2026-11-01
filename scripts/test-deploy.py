@@ -30,8 +30,13 @@ class DeployTests(unittest.TestCase):
 
     @classmethod
     def git(cls, cwd, *args, check=True):
-        return subprocess.run(['git', '-C', str(cwd), *args], env=cls.env, text=True,
-                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=check)
+        if args and args[0] == 'clone':
+            args = (args[0], '--no-local', *args[1:])
+        result = subprocess.run(['git', '-C', str(cwd), *args], env=cls.env, text=True,
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if check and result.returncode:
+            raise RuntimeError(result.stderr)
+        return result
 
     @classmethod
     def identity(cls, directory):
@@ -63,8 +68,8 @@ class DeployTests(unittest.TestCase):
         else:
             self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertEqual((self.web / 'index.html').read_text(), 'old live page')
-        self.assertFalse((self.web / '.festival-deploy.lock').exists())
-        self.assertFalse((self.checkout / '.git/festival-deploy.lock').exists())
+        self.assertFalse((self.web / '.basecentral-deploy.lock').exists())
+        self.assertFalse((self.checkout / '.git/basecentral-deploy.lock').exists())
         return result
 
     def push_author(self):
@@ -171,14 +176,14 @@ class DeployTests(unittest.TestCase):
         self.publish(success=False)
 
     def test_existing_destination_lock_is_preserved(self):
-        lock = self.web / '.festival-deploy.lock'
+        lock = self.web / '.basecentral-deploy.lock'
         lock.mkdir()
         result = subprocess.run(['bash', str(self.script), str(self.web)], env=self.env, text=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.assertNotEqual(result.returncode, 0)
         self.assertTrue(lock.is_dir())
         self.assertEqual((self.web / 'index.html').read_text(), 'old live page')
-        self.assertFalse((self.checkout / '.git/festival-deploy.lock').exists())
+        self.assertFalse((self.checkout / '.git/basecentral-deploy.lock').exists())
 
     def test_existing_htaccess_symlink_is_rejected(self):
         victim = self.case / 'host-rules'

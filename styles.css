@@ -13,3 +13,13 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;box-sizing:b
 .toolbar .year-nav{height:44px;border:0;box-shadow:inset 0 0 0 1px var(--line)}.toolbar .year-nav select{background-color:transparent}
 @media(min-width:600px){.toolbar{display:grid;grid-template-columns:auto auto minmax(96px,1fr) auto;gap:8px}.toolbar .month-label{min-width:0}.toolbar .month-label select{max-width:none;width:100%}.toolbar #countries{padding:4px 8px}}
 @media(min-width:600px) and (max-width:760px){.toolbar #countries svg{display:none}}
+
+/* Shared controls 1.0.0: app-owned screen adapters. */
+@media screen {
+ .header-actions,.toolbar,.year-nav,.setting-buttons,.dialog-actions{align-items:flex-start;} .toolbar .year-nav{box-shadow:none;}
+}
+@media screen and (max-width:600px){
+ .topbar .brand{font-size:24px;letter-spacing:-.5px;gap:6px;min-width:0;}
+ .topbar .brand>span{min-width:0;} .brand-sub{letter-spacing:.5px;white-space:normal;}
+ .header-actions{flex:none;}
+}

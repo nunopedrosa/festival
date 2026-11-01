@@ -1,3 +1,5 @@
+> Deployment command updated 2026-11-01: see [SHARED_DEPLOYMENT.md](SHARED_DEPLOYMENT.md). Shared core/profile supersedes older commands and broad deletion. Keep the app-specific hosting, private paths and release requirements below.
+
 # Deploy Festival to DreamHost
 
 Canonical source: https://github.com/nunopedrosa/festival . This is a public repository; use its HTTPS clone URL. Deployment runs from an SSH shell on the DreamHost server, under the user who owns the website directory.
