@@ -1,5 +1,7 @@
 const fs=require('fs'),cp=require('child_process'),path=require('path');
-const root=path.resolve(__dirname,'..'),out=path.resolve(root,'..','festival-pwa-v1.1.0.zip');
+const root=path.resolve(__dirname,'..'),version=require('../package.json').version,suffix=process.argv[2]||'';
+if(suffix&&!/^[a-z0-9-]+$/.test(suffix))throw Error('Invalid package suffix');
+const out=path.resolve(root,'..','festival-pwa-v'+version+(suffix?'-'+suffix:'')+'.zip');
 cp.execFileSync('python3',['-c',`from pathlib import Path
 import zipfile,sys
 root=Path(sys.argv[1]);out=Path(sys.argv[2])

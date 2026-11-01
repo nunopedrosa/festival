@@ -13,5 +13,9 @@
   "scripts": {
     "build": "node scripts/build.cjs",
     "test": "node tests/engine.cjs && node tests/workflows.cjs && node tests/offline.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nunopedrosa/festival.git"
   }
 }

@@ -2,6 +2,23 @@
 
 PWA estática para comparar feriados de países de todo o mundo. HTML, CSS e JavaScript; sem servidor de aplicação, contas, APIs de calendário ou consultas externas durante o cálculo.
 
+## GitHub e DreamHost
+
+Repositório público: https://github.com/nunopedrosa/festival
+
+O projeto inclui `scripts/deploy.sh` para executar por SSH no DreamHost. Mantém o checkout fora da pasta pública e publica só os ficheiros estáticos, sem npm/Python no servidor:
+
+```sh
+mkdir -p "$HOME/repos"
+git clone https://github.com/nunopedrosa/festival.git "$HOME/repos/festival"
+cd "$HOME/repos/festival"
+bash scripts/deploy.sh /home/YOUR_SHELL_USER/YOUR_WEBSITE_DIRECTORY
+```
+
+Substituir o último argumento pela pasta pública **existente** configurada no DreamHost. Nas atualizações, repetir apenas o comando `bash scripts/deploy.sh …`: o script faz `git pull --ff-only`, recusa alterações locais/divergência e preserva ficheiros alheios e um `.htaccess` existente. O manifesto `deploy-files.txt` e os recursos prontos têm de estar publicados no repositório.
+
+Instruções completas, cabeçalhos de cache e limites da publicação: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ## Experimentar
 
 O projeto já inclui todos os ficheiros prontos. Não é necessário instalar npm para o utilizar.

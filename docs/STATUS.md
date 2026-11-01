@@ -50,3 +50,7 @@ All engine, preference/backup and simulated offline checks passed after expansio
 Modern Chrome inspection at 375 and 620 px confirmed the normalized controls. At 620 px the year group, year selector, Today, month and Countries controls all measured 44 px high on the same line; mobile controls wrap in two rows. Bhutan was found in the picker, selected, and its 17 December 2026 National Day was displayed. Physical Safari/iPhone validation remains pending.
 
 Worldwide checks also cover multi-day Eid al-Fitr cells rather than displaying only the first day of a multi-day rule.
+
+## DreamHost deployment tooling — 2026-11-01
+
+Added a host-side Bash/Git deployment script for the public nunopedrosa/festival repository, generated tracked public-file manifest, first-install-only .htaccess template and SSH/setup documentation. No runtime version bump: application bytes are unchanged. Bash syntax check and 17 isolated local deployment regressions passed; no GitHub push or actual DreamHost deployment was performed.

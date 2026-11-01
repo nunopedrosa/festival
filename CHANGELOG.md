@@ -1,5 +1,9 @@
 # Changelog
 
+## Deployment tooling — 2026-11-01
+
+Add DreamHost pull-only deployment script, committed generated public-file manifest, preserve-existing Apache header template, public GitHub setup documentation and 17 isolated deployment regression checks. Runtime version remains 1.1.0.
+
 ## 1.1.0 — 2026-11-01
 
 Normalize calendar selector appearance and control heights, align the desktop toolbar, and retain a compact two-row mobile layout. Expand to all 249 ISO countries/territories plus Kosovo and the Canary Islands, with 207 local rule calendars and 44 packaged national calendar supplements. Bundle all flags and bilingual country names, preserve existing preferences/backups, and mark calendars with no available events clearly.

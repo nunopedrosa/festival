@@ -9,3 +9,9 @@ Read docs/SHARED_PWA_RULES.md in full before changes. Adopted shared revision 20
 - Backups contain all device preferences in versioned JSON; preview, Restore preferences enabled by default, atomic replacement, cancellation preserves state.
 - Do not publish to production without an explicit deployment instruction. Deliver a self-contained downloadable static project.
 - Run npm test and npm run build after engine/catalogue changes. npm is development-only; committed static assets run directly.
+
+## Hosting
+- Canonical public repository: https://github.com/nunopedrosa/festival . Hosting is DreamHost.
+- Read docs/DEPLOYMENT.md, scripts/deploy.sh and scripts/test-deploy.py before deployment changes. Keep deployment host-side, pull-only, clean/upstream-checked and --ff-only; never reset/clean/stash/push server checkouts.
+- Deploy only committed deploy-files.txt allowlisted public assets. Preserve unrelated hosting files and any existing .htaccess. Stage before publishing, reject symlinks/overlapping paths, and document per-file rather than whole-release atomicity.
+- Build locally; commit prepared runtime assets and deploy-files.txt. No Node/npm/Python dependency on the hosting server. Never deploy implicitly.

@@ -1,2 +1,5 @@
 node_modules/
 .openai/
+dist/
+__pycache__/
+.DS_Store

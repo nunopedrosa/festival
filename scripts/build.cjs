@@ -49,6 +49,7 @@ fs.copyFileSync('node_modules/flag-icons/LICENSE','vendor/flag-icons-LICENSE.txt
 // Build a complete offline manifest from runtime files only.
 const files=['./','./index.html','./styles.css','./app.js','./icons.js','./engine.js','./i18n.js','./manifest.webmanifest','./version.json','./vendor/holiday-parser.js','./vendor/world-data.js','./vendor/country-names.js','./vendor/supplement-data.js','./vendor/python-holidays-LICENSE.txt','./vendor/python-holidays-sources.json','./vendor/country-names-LICENSE.txt','./vendor/ATTRIBUTION.md','./assets/icons.svg','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./assets/apple-touch-icon.png','./assets/pt.svg','./assets/gb.svg','./docs/DATA_SOURCES.md','./vendor/THIRD_PARTY_LICENSES.txt','./vendor/date-holidays-LICENSE.txt','./vendor/parser-LICENSE.txt','./vendor/flag-icons-LICENSE.txt'].concat(flagFiles);
 fs.writeFileSync('precache.js','self.FESTIVAL_ASSETS='+JSON.stringify(files)+';\n');
+fs.writeFileSync('deploy-files.txt',Array.from(new Set(files.filter(f=>f!=='./').map(f=>f.slice(2)).concat(['sw.js','precache.js','LICENSE']))).sort().join('\n')+'\n');
 fs.mkdirSync('dist',{recursive:true});
 for(const f of files){if(f==='./')continue;const src=f.slice(2);const dest=path.join('dist',src);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(src,dest);}
 for(const f of ['sw.js','precache.js','LICENSE'])fs.copyFileSync(f,path.join('dist',f));
