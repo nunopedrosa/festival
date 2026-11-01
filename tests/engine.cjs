@@ -1,0 +1,38 @@
+const assert=require('node:assert/strict'),fs=require('fs'),vm=require('vm');
+global.window=global;require('../vendor/holiday-parser.js');vm.runInThisContext(fs.readFileSync('vendor/world-data.js','utf8'));vm.runInThisContext(fs.readFileSync('vendor/country-names.js','utf8'));vm.runInThisContext(fs.readFileSync('vendor/supplement-data.js','utf8'));require('../engine.js');require('../i18n.js');
+const E=FestivalEngine;
+const flat=m=>Object.values(m).flat();
+const pt=E.get('PT','',2026,'pt',false);
+assert.equal(flat(pt).filter(h=>h.type==='public').length,13);
+assert.equal(pt['2026-04-05'][0].rule,'easter');assert.equal(pt['2026-04-03'][0].name,'Sexta-Feira Santa');assert.equal(pt['2026-06-04'][0].name,'Corpo de Deus');
+assert.equal(E.get('PT','',2027,'en',false)['2027-03-28'][0].rule,'easter');
+assert.equal(E.days(2024).length,366);assert.equal(E.days(2026).length,365);assert.ok(E.days(2024).includes('2024-02-29'));
+assert.equal(pt['2026-02-17'],undefined);assert.equal(E.get('PT','',2026,'pt',true)['2026-02-17'][0].type,'optional');
+const lis=E.get('PT','LIS',2026,'en',true)['2026-06-13'][0];assert.equal(lis.scope,'regional');assert.equal(lis.type,'optional');assert.deepEqual(lis.regions,['Lisboa']);assert.equal(lis.original,'Santo António — feriado municipal');
+assert.equal(E.get('PT','20',2026,'pt',false)['2026-05-25'][0].scope,'regional');
+assert.equal(E.get('PT','30',2026,'pt',false)['2026-07-01'][0].scope,'regional');
+assert.ok(E.get('DE','BY',2026,'en',false)['2026-01-06'].some(h=>h.scope==='regional'));
+assert.ok(E.get('GB','',2026,'en',false)['2026-12-28'].some(h=>h.substitute));
+assert.equal(E.get('GB','SCT',2026,'en',false)['2026-04-06'],undefined);
+assert.equal(E.get('GB','',2026,'en',false)['2026-04-06'],undefined);
+assert.equal(E.get('GB','ENG',2026,'en',false)['2026-04-06'][0].scope,'regional');
+assert.equal(E.get('PT','30',2026,'pt',false)['2026-04-02'][0].name,'Dia da Autonomia');
+assert.equal(E.get('PT','30',2024,'pt',false)['2024-04-02'],undefined);
+assert.ok(E.get('PT','30',2026,'pt',false)['2026-12-26']);
+assert.equal(flat(E.get('PT','',2014,'pt',false)).length,9);
+assert.ok(E.get('GR','',2026,'en',false)['2026-04-12'].some(h=>/orthodox/.test(h.rule)));
+const keys=Object.keys(FestivalTranslations.en);assert.deepEqual(Object.keys(FestivalTranslations.pt).sort(),keys.slice().sort());
+Object.keys(E.countries).forEach(code=>{for(const year of [2000,2026,2027,2050]){const out=E.get(code,'',year,'en',false);flat(out).forEach(h=>{assert.ok(E.days(year).includes(h.date),code+' '+h.date);assert.equal(typeof h.name,'string');});}E.regions(code,'en').forEach(r=>assert.ok(r.name));});
+// Every ISO entry and both extra catalogue codes are selectable and restorable.
+assert.equal(Object.keys(E.countries).length,251);
+assert.equal(Object.keys(FestivalSupplement.countries).length,44);
+for(const code of ['US','BR','JP','AU','ZA','BT','QA','KH','NP'])assert.ok(Object.keys(E.get(code,'',2026,'en',false)).length>0,code);
+const sa=E.get('SA','',2026,'en',false);for(const d of ['2026-03-20','2026-03-21','2026-03-22'])assert.ok(sa[d].some(h=>/Eid al-Fitr/.test(h.name)),d);
+assert.ok(E.get('BT','',2026,'en',false)['2026-12-17']);
+assert.ok(E.get('QA','',2026,'en',false)['2026-12-18']);
+assert.deepEqual(E.get('BT','',2000,'en',false),{}); // source starts in 2007; never invent earlier events.
+const worldwide={lang:'en',countries:Object.keys(E.countries).map(code=>({code,region:''})),year:2026,month:0,mode:'holidays',view:'grid',other:false,coincide:false};
+assert.equal(E.validate(worldwide).countries.length,251);
+const p={lang:'pt',countries:[{code:'PT',region:'LIS'}],year:2026,month:0,mode:'holidays',view:'grid',other:true,coincide:false};assert.deepEqual(E.validate(JSON.parse(JSON.stringify(p))),p);
+for(const patch of [{year:2051},{countries:[{code:'PT',region:'INVALID'}]},{countries:[]},{countries:[{code:'PT',region:''},{code:'PT',region:''}]},{lang:'xx'},{month:-1},{other:'true'}])assert.throws(()=>E.validate({...p,...patch}));
+console.log('PASS: worldwide catalogues × 4 years, civil dates, Easter, Orthodox Easter, regional scope, substitutes, optional days, bilingual keys and invalid preference rejection.');
